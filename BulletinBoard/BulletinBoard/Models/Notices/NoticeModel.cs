@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using BulletinBoard.DAL.Entities;
 using BulletinBoard.Models.Comments;
 using BulletinBoard.Models.GalleryImages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BulletinBoard.Models.Notices
 {
@@ -15,20 +16,20 @@ namespace BulletinBoard.Models.Notices
         public string Title { get; set; }
         [Display(Name = "Описание")]
         public string Description { get; set; }
-        public int UserId { get; set; }
         [Display(Name = "Автор")]
-        public User User { get; set; }
-        public int CategoryId { get; set; }
+        public string Author { get; set; }
         [Display(Name = "Категория")]
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
+        public SelectList Category { get; set; }
         [Display(Name = "Дата публикации")]
         public DateTime CreatedOn { get; set; }
         [Display(Name = "Лайки")]
         public int Likes { get; set; }
         public byte[] Image { get; set; }
         public string ImagePath { get; set; }
+
         public RecordImageType RecordImageType { get; set; }
-        public List<CommentsModel> Comments { get; set; }
+        public List<CommentModel> Comments { get; set; }
         public List<GalleryImageModel> Images { get; set; }
     }
 }

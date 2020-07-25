@@ -6,7 +6,7 @@ namespace BulletinBoard.Models.GalleryImages
     public class AddGalleryImageModel
     {
         [Required]
-        public int RecordId { get; set; }
+        public int NoticeId { get; set; }
 
         public IFormFileCollection Images { get; set; }
     }

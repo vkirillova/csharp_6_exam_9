@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BulletinBoard.DAL.DbContext;
 using BulletinBoard.DAL.DbContext.Contracts;
 using BulletinBoard.DAL.Entities;
 using BulletinBoard.DAL.EntitiesConfiguration;
 using BulletinBoard.DAL.EntitiesConfiguration.Contracts;
+using BulletinBoard.Services.GalleryImages;
+using BulletinBoard.Services.GalleryImages.Contracts;
+using BulletinBoard.Services.Notices;
+using BulletinBoard.Services.Notices.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -50,9 +55,9 @@ namespace BulletinBoard
             });
             services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
 
-            //services.AddTransient<IRecordService, RecordService>();
-            //services.AddTransient<IFileSaver, DbFilesSaver>();
-            //services.AddTransient<DbFilesSaver>();
+            services.AddTransient<INoticeService, NoticeService>();
+            services.AddTransient<IFileSaver, DbFilesSaver>();
+            services.AddTransient<DbFilesSaver>();
 
             services.AddDefaultIdentity<User>(
                     options =>
@@ -68,6 +73,8 @@ namespace BulletinBoard
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            Mapper.Initialize(config => config.AddProfile(new MappingProfile()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

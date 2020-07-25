@@ -13,7 +13,6 @@ namespace BulletinBoard.DAL.DbContext
         public DbSet<Notice> Notices { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<GalleryImage> GalleryImages { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
 

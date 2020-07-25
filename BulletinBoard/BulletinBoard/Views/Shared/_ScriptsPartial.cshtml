@@ -1,0 +1,38 @@
+﻿<script>
+
+    $(document).ready(function() {
+
+        $('.btn-primary[value="Like"]').on('click',
+            function() {
+                var noticeId = $(this).attr('noticeId');
+                $.ajax({
+                    url: '@Url.Action("LikeAjax", "Notice")',
+                    method: 'POST',
+                    data: { 'noticeId': noticeId },
+                    error: function(data) {
+                        console.log(data);
+                        alert('Error ' + data.status + "\n" + data.responseText);
+                    },
+                    success: function(data) {
+                        $('#likesCount-' + noticeId).html(data);
+                    }
+                });
+            });
+
+        $('.recordDetails').on('click',
+            function () {
+                alert('link');
+                var noticeId = $(this).attr('noticeId');
+                $.ajax({
+                    method: 'GET',
+                    url: '@Url.Action("Details", "Notice")' + '?noticeId=' + noticeId,
+                    success: function (data) {
+                        console.log(data);
+                        $('body').html(data);
+                    }
+            });
+        });
+
+    });
+
+</script>

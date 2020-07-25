@@ -9,6 +9,7 @@ namespace BulletinBoard.DAL.EntitiesConfiguration
         public IEntityConfiguration<Product> ProductConfiguration { get; }
         public IEntityConfiguration<GalleryImage> GalleryImageConfiguration { get; }
         public IEntityConfiguration<Category> CategoryConfiguration { get; }
+        public IEntityConfiguration<Comment> CommentConfiguration { get; }
 
         public EntityConfigurationsContainer()
         {
@@ -16,6 +17,7 @@ namespace BulletinBoard.DAL.EntitiesConfiguration
             ProductConfiguration = new ProductConfiguration();
             GalleryImageConfiguration = new GalleryImageConfiguration();
             CategoryConfiguration = new CategoryConfiguration();
+            CommentConfiguration = new CommentConfiguration();
         }
     }
 }

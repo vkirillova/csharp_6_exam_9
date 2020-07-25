@@ -17,17 +17,10 @@ namespace BulletinBoard.DAL.Repositories
         public IEnumerable<Notice> GetAllNotices()
         {
             return entities
-                .Include(e => e.User)
-                .Include(e=>e.Title)
-                .Include(e => e.ProductImages).ThenInclude(e=>e.Image)
-                .Include(c => c.CreatedOn)
-                .Include(e=>e.Description)
+                .Include(e=>e.Category)
+                .Include(e=>e.ProductImages)
+                .Include(e=>e.User)
                 .ToList();
-            //return entities
-            //    .Include(e => e.Author)
-            //    .Include(e => e.Products)
-            //    .ThenInclude(c => c.Author)
-            //    .ToList();
         }
 
         public Notice GetNoticeById(int id)

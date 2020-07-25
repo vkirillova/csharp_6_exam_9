@@ -3,6 +3,7 @@ using BulletinBoard.DAL.Entities;
 using BulletinBoard.Models.Comments;
 using BulletinBoard.Models.GalleryImages;
 using BulletinBoard.Models.Notices;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BulletinBoard.Services.Notices.Contracts
 {
@@ -12,7 +13,9 @@ namespace BulletinBoard.Services.Notices.Contracts
         void CreateNotice(NoticeCreateModel model, int currentUserId);
         int AddLike(int noticeId);
         NoticeModel GetNoticeById(in int noticeId);
-        CommentsModel AddComment(AddCommentRequestModel model, User user);
+        CommentModel AddComment(AddCommentRequestModel model, User user);
         IEnumerable<GalleryImageModel> UploadImages(AddGalleryImageModel model);
+        SelectList GetCategoriesSelect();
+        void EditNotice(NoticeEditModel model);
     }
 }

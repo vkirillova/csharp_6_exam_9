@@ -1,0 +1,19 @@
+﻿@model BulletinBoard.Models.GalleryImages.AddGalleryImageModel
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="NoticeId" value="@Model.NoticeId" />
+    <div class="form-group">
+        <label asp-for="Images" class="control-label"></label>
+        <input asp-for="Images" type="file" multiple="multiple" accept="image/*" class="form-control" />
+        <span asp-validation-for="Images" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Upload" class="btn btn-primary" />
+    </div>
+</form>
+<br/>
+<div>
+    <input type="file" multiple="multiple" name="upload" id="uploadFile"/>
+    <input type="hidden" id="recordId" value="@Model.NoticeId"/>
+    <input type="button" value="Upload" id="uploadImages"/>
+</div>
+

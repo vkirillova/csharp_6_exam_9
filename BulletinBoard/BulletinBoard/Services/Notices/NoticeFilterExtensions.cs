@@ -23,10 +23,11 @@ namespace BulletinBoard.Services.Notices
             return notices;
         }
 
-        public static IEnumerable<Notice> ByKeyWord(this IEnumerable<Notice> notices, string keyWord)
+        public static IEnumerable<Notice> SearchByKeyWord(this IEnumerable<Notice> notices, string keyWord)
         {
             if (!string.IsNullOrWhiteSpace(keyWord))
-                notices = notices.Where(p => p.Title.Contains(keyWord));
+                notices = notices.Where(r => r.Title.Contains(keyWord) || r.Description.Contains(keyWord));
+
             return notices;
         }
 

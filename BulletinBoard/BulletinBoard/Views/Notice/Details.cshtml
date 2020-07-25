@@ -1,0 +1,174 @@
+﻿@using BulletinBoard.DAL.Entities
+@using BulletinBoard.Models.GalleryImages
+@model BulletinBoard.Models.Notices.NoticeModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>RecordModel</h4>
+    <hr />
+    
+    @switch (Model.RecordImageType)
+    {
+        case RecordImageType.Db:
+            if (Model.Image != null && Model.Image.Length > 0)
+            {
+                <img style="width: 50%; height: 50%" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Image))"/>
+            }
+            break;
+        case RecordImageType.Disk:
+            if (!string.IsNullOrWhiteSpace(Model.ImagePath))
+            {
+                <img style="width: 50%; height: 50%" src="@Url.Content(Model.ImagePath)" />
+            }
+            break;
+    }
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+    
+    <table id="commentsTable" class="table">
+        <tbody>
+        @foreach (var item in Model.Comments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div id="gallery">
+    @foreach (var galleryImage in Model.Images)
+    {
+        if (galleryImage.Image != null && galleryImage.Image.Length > 0)
+        {
+            <img style="width: 20%; height: 20%" src="data:image/jpeg;base64,@(Convert.ToBase64String(galleryImage.Image))"/>
+        }
+    }
+</div>
+<div>
+    <div><input type="button" id="addComment" class="btn-primary" value="Comment"/></div>
+    <div id="commentForm" style="display: none">
+        <div><textarea id="commentText" class="form-control"></textarea></div>
+        <div><input type="button" id="sendComment" class="btn-primary" value="Send"/></div>
+    </div>
+    <br/>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@{
+    var addGalleryImageModel = new AddGalleryImageModel()
+    {
+        NoticeId = Model.Id
+    };
+}
+
+<partial name="_GalleryImagesPartial" model="@addGalleryImageModel" />
+
+@section Scripts
+    {
+    <script>
+
+        $('#addComment').click(function () {
+            $('#commentForm').val('');
+            $('#commentForm').show();
+            $('#addComment').hide();
+    });
+
+        $('#sendComment').click(function () {
+
+        var comment = $('#commentText').val();
+        var recordId = '@Model.Id';
+            $.ajax({
+        url: '@Url.Action("AddComment", "Notice")',
+                method: 'POST',
+                data: { 'comment': comment, 'recordId': recordId },
+                dataType: 'JSON',
+                error: function (data) {
+                console.log(data);
+                alert('Error ' + data.status + "\n" + data.responseText);
+            },
+                success: function (data) {
+                    $('#commentForm').hide();
+                    $('#addComment').show();
+                var authorCell = "<td>" + data.authorName + "</td>";
+                var createdOnCell = "<td>" + data.createdOn + "</td>";
+                var content = "<td colspan='2'>" + data.content + "</td>";
+                var newRow = "<tr>" + authorCell + createdOnCell + "</tr>" + "<tr>" + content + "</tr>";
+                    $('#commentsTable tbody').append(newRow);
+            }
+        });
+        });
+
+        $('#uploadImages').on('click', function () {
+            var files = document.getElementById('uploadFile').files;
+            if (files.length > 0) {
+                var data = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    data.append("file" + i, files[i]);
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UploadAjax", "Notice")' + '/?recordId=' + $('#recordId').val(),
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var img = '<img style="width: 20%; height: 20%" src="data:image/jpeg;base64,' +
+                                data[i].image +
+                                '"/>';
+                            $('#gallery').append(img);
+                        }
+                    },
+                    error: function(data) {
+                        alert(data);
+                    }
+                });
+            }
+        })
+
+    </script>
+}
+
+

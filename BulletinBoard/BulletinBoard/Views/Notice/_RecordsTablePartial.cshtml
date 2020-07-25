@@ -1,0 +1,62 @@
+﻿@using BulletinBoard.Models.Notices
+@model BulletinBoard.Models.Notices.NoticeIndexModel
+
+<table class="table">
+    <tbody>
+    @foreach (var item in Model.Notices)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-recordId="@item.Id">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td id="likesCount-@item.Id">
+                @Html.DisplayFor(modelItem => item.Likes)
+            </td>
+            <td>
+                <input type="button" recordId="@item.Id" class="btn-primary" value="Like"/>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.PagingModel.HasPreviousPage)
+{
+    @Html.ActionLink("<< Назад", "Index", "Notice",
+        new NoticeIndexModel()
+        {
+            Author = Model.Author,
+            SearchKey = Model.SearchKey,
+            DateFrom = Model.DateFrom,
+            DateTo = Model.DateTo,
+            Page = Model.Page - 1
+        })
+}
+
+<b>@Model.Page</b>
+
+@if (Model.PagingModel.HasNextPage)
+{
+    @Html.ActionLink("Вперед >>", "Index", "Notice",
+        new NoticeIndexModel()
+        {
+            Author = Model.Author,
+            SearchKey = Model.SearchKey,
+            DateFrom = Model.DateFrom,
+            DateTo = Model.DateTo,
+            Page = Model.Page + 1
+        })
+}

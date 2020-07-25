@@ -15,5 +15,8 @@ namespace BulletinBoard.Models.Notices
         public decimal Price { get; set; }
         [Display(Name = "Изображение")]
         public IFormFile Image { get; set; }
+        public int CategoryId { get; set; }
+        [Display(Name = "Категория")]
+        public SelectList CategoriesSelect { get; set; }
     }
 }
