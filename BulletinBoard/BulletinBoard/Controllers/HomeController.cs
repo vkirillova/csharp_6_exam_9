@@ -20,7 +20,7 @@ namespace BulletinBoard.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Notice");
         }
 
         public IActionResult Privacy()

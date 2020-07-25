@@ -12,10 +12,12 @@ namespace BulletinBoard.Services.Notices.Contracts
         List<NoticeModel> GetAllNotices(NoticeIndexModel model);
         void CreateNotice(NoticeCreateModel model, int currentUserId);
         int AddLike(int noticeId);
-        NoticeModel GetNoticeById(in int noticeId);
+        NoticeEditModel GetNoticeById(in int noticeId);
         CommentModel AddComment(AddCommentRequestModel model, User user);
         IEnumerable<GalleryImageModel> UploadImages(AddGalleryImageModel model);
         SelectList GetCategoriesSelect();
         void EditNotice(NoticeEditModel model);
+        NoticeCreateModel GetNoticeCreateModel();
+        void Upper(int noticeId);
     }
 }

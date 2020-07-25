@@ -35,5 +35,6 @@ namespace BulletinBoard.Models.Notices
         [Display(Name = "Изображение")]
         public List<GalleryImageModel> Images { get; set; }
         public IFormFile Image { get; set; }
+        public IFormFileCollection ImgsCollection { get; set; }
     }
 }

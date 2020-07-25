@@ -18,6 +18,10 @@ namespace BulletinBoard.Models.Notices
         public string Description { get; set; }
         [Display(Name = "Автор")]
         public string Author { get; set; }
+        [Display(Name = "Телефон")]
+        public string Phone { get; set; }
+        [Display(Name = "Адрес")]
+        public string Address { get; set; }
         [Display(Name = "Категория")]
         public int CategoryId { get; set; }
         public SelectList Category { get; set; }

@@ -28,9 +28,9 @@ namespace BulletinBoard.Controllers
         {
             try
             {
-                var recordModels = _noticeService.GetAllNotices(model);
+                var recordModels = _noticeService.GetAllNotices(model).OrderByDescending(p=>p.CreatedOn);
 
-                model.Notices = recordModels;
+                model.Notices = recordModels.ToList();
 
                 return View(model);
             }
@@ -44,7 +44,8 @@ namespace BulletinBoard.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            return View();
+            var model = _noticeService.GetNoticeCreateModel();
+            return View(model);
         }
 
         [Authorize]
@@ -168,6 +169,7 @@ namespace BulletinBoard.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult EditProduct(NoticeEditModel model)
         {
             try
@@ -179,6 +181,32 @@ namespace BulletinBoard.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Upper(int noticeId)
+        {
+
+            _noticeService.Upper(noticeId);
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult UpperAjax(int noticeId)
+        {
+            try
+            {
+                _noticeService.Upper(noticeId);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
     }

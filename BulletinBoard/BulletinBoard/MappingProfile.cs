@@ -67,7 +67,12 @@ namespace BulletinBoard
                 .ForMember(target => target.Description,
                     src => src.MapFrom(p => p.Description))
                 .ForMember(target => target.Category,
-                    src => src.MapFrom(p => p.Category));
+                    src => src.MapFrom(p => p.Category))
+                .ForMember(target => target.Phone,
+                    src => src.MapFrom(p => p.User.Phone))
+                .ForMember(target => target.Address,
+                    src => src.MapFrom(p => p.User.Address))
+                ;
         }
 
         public void CreateRecordCreateModelToRecord()
@@ -76,7 +81,10 @@ namespace BulletinBoard
                 .ForMember(target => target.CreatedOn,
                     src => src.MapFrom(p => DateTime.Now))
                 .ForMember(target => target.Image,
-                    src => src.Ignore());
+                    src => src.Ignore())
+                .ForMember(target => target.Category.Id,
+                    src => src.MapFrom(p => p.CategoryId))
+                ;
         }
 
         private void CreateUniversalMap<From, To>()

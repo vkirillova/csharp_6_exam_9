@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BulletinBoard.Services.Notices
 {
-    public class NoticeService: INoticeService
+    public class NoticeService : INoticeService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IFileSaver _fileSaver;
@@ -63,12 +63,21 @@ namespace BulletinBoard.Services.Notices
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
-                var record = Mapper.Map<Notice>(model);
-                record.UserId = currentUserId;
-
-                _fileSaver.SaveFile(record, model.Image);
-
-                unitOfWork.Notices.Create(record);
+                var notice = Mapper.Map<Notice>(model);
+                notice.UserId = currentUserId;
+                notice.CreatedOn = DateTime.Now;
+                _fileSaver.SaveFile(notice, model.Image);
+                var currentNotice = unitOfWork.Notices.Create(notice);
+                foreach (var img in model.ImgsCollection)
+                {
+                    var galleryModel = new GalleryImage
+                    {
+                        Image = _dbFileSaver.GetImageBytes(img),
+                        NoticeId = currentUserId
+                    };
+                    unitOfWork.GalleryImages.Create(galleryModel);
+                }
+                unitOfWork.Notices.Create(notice);
             }
         }
 
@@ -83,7 +92,7 @@ namespace BulletinBoard.Services.Notices
             }
         }
 
-        public NoticeModel GetNoticeById(in int noticeId)
+        public NoticeEditModel GetNoticeById(in int noticeId)
         {
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
@@ -96,7 +105,7 @@ namespace BulletinBoard.Services.Notices
                     nameof(Category.Name),
                     model.CategoryId);
 
-                return Mapper.Map<NoticeModel>(notice);
+                return Mapper.Map<NoticeEditModel>(notice);
             }
         }
 
@@ -149,6 +158,15 @@ namespace BulletinBoard.Services.Notices
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
                 var notice = Mapper.Map<Notice>(model);
+                unitOfWork.Notices.Update(notice);
+            }
+        }
+        public void Upper(int noticeId)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.Create())
+            {
+                var notice = unitOfWork.Notices.GetById(noticeId);
+                notice.CreatedOn = DateTime.Now;
                 unitOfWork.Notices.Update(notice);
             }
         }
