@@ -20,5 +20,6 @@ namespace BulletinBoard.Models.Notices
         public List<NoticeModel> Notices { get; set; }
         public int? Page { get; set; }
         public PagingModel PagingModel { get; set; }
+        public byte[] Image { get; set; }
     }
 }

@@ -7,6 +7,9 @@
     {
         <tr>
             <td>
+                <img style="width: 50%; height: 50%" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Image))" />
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CreatedOn)
             </td>
             <td>
